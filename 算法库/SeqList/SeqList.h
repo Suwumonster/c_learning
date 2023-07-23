@@ -1,7 +1,7 @@
 //*********************************
 // 作者：suwu
 // 环境: vs2019 win10
-// 最后修改时间：2023/7/21 15:50
+// 最后修改时间：2023/7/23 15:51
 //*********************************
 #pragma once
 #include <stdio.h>
@@ -43,19 +43,24 @@ void SeqListPrint(SeqList* ps);//打印
 // 函数功能：查找顺序表里面的数据，和x相同的第一个数据的下标将被返回。
 // 函数参数：顺序表指针ps，比对数据x
 // 返回类型及内容：和x相同的第一个数据的下标，如果没找到或者顺序表指针ps为空则返回-1
-int SeqListFind(SeqList* ps, SLDateType x);
+int SeqListFind1(SeqList* ps, SLDateType x);
+
+// 函数名称：SeqListFind
+// 函数功能：从begin下标位置开始查找顺序表里面的数据，和x相同的第一个数据的下标将被返回。
+//			 配合while循环可以把所有与x值相同的数据删除
+// 函数参数：顺序表指针ps，比对数据x，开始查找下标begin
+// 返回类型及内容：和x相同的第一个数据的下标，如果没找到或者顺序表指针ps为空则返回-1
+int SeqListFind2(SeqList* ps, SLDateType x, int begin);
 
 // 顺序表在pos位置插入x
 void SeqListInsert(SeqList* ps, int pos, SLDateType x);
 // 顺序表删除pos位置的值
 void SeqListErase(SeqList* ps, int pos);
 
-void SeqListPushBack(SeqList* ps, SLDateType x);//后插，笔试可用Insert函数实现。
-void SeqListPushFront(SeqList* ps, SLDateType x);//前插，笔试可用Insert函数实现。
-void SeqListPopFront(SeqList* ps);//后删，笔试可用Erase函数实现。
-void SeqListPopBack(SeqList* ps);//前删，笔试可用Erase函数实现。
 
 
 
-
-
+void SeqListPushBack(SeqList* ps, SLDateType x);//尾插，笔试可用Insert函数实现。
+void SeqListPushFront(SeqList* ps, SLDateType x);//头插，笔试可用Insert函数实现。
+void SeqListPopFront(SeqList* ps);//头删，笔试可用Erase函数实现。
+void SeqListPopBack(SeqList* ps);//尾删，笔试可用Erase函数实现。
