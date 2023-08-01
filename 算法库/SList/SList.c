@@ -124,6 +124,29 @@ void SListInsertAfter(SListNode* pos, SLTDateType x)
 	newnode->next = cur;
 }
 
+// 单链表在pos位置之前插入x
+void SListInsert(SListNode** pphead, SListNode* pos, SLTDateType x)
+{
+	if (*pphead == NULL || pos == NULL)
+	{
+		return;
+	}
+	if (*pphead == pos)
+	{
+		SListPushFront(pphead, x);
+	}
+	else
+	{
+		SListNode* cur = *pphead;
+		while (cur->next != pos)
+		{
+			cur = cur->next;
+		}
+		SListNode* newnode = BuySListNode(x);
+		cur->next = newnode;
+		newnode->next = pos;
+	}
+}
 
 // 单链表删除pos位置之后的值
 // 分析思考为什么不删除pos位置？
@@ -144,20 +167,39 @@ void SListEraseAfter(SListNode* pos)
 }
 
 
-// 单链表的销毁
-void SListDestroy(SListNode* phead)
+// 单链表删除pos位置的值
+void SListEraseAfter(SListNode** pphead, SListNode* pos)
 {
-	if (phead == NULL)
+	if (*pphead == NULL || pos == NULL)
 	{
 		return;
 	}
-	SListNode* prev = phead;
-	SListNode* cur = phead->next;
+	if (*pphead == pos)
+	{
+		SListPopFront(pphead);
+	}
+	else
+	{
+		SListNode* cur = *pphead;
+		while (cur->next != pos)
+		{
+			cur = cur->next;
+		}
+		cur->next = pos->next;
+		free(pos);
+	}
+}
+
+
+// 单链表的销毁
+void SListDestroy(SListNode** pphead)
+{
+	SListNode* cur = *pphead;
 	while (cur != NULL)
 	{
-		free(prev);
-		prev = cur;
-		cur = cur->next;
+		SListNode* next = cur->next;
+		free(cur);
+		cur = next;
 	}
-	free(prev);
+	*pphead = NULL;
 }
