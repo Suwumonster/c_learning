@@ -6,8 +6,9 @@
 
 // ******************************
 // 作者：suwu
-// 最后修改时间：2023/10/19 23:39
+// 最后修改时间：2023/10/20 21:08
 // ******************************
+
 typedef int HeapDatatype;//堆内存储数据类型
 
 typedef struct HEAP//堆
@@ -58,3 +59,21 @@ int heapsize(HP* php);
 // 函数参数：堆指针
 // 函数返回类型及内容：int 真/假
 int heapempty(HP* php);
+
+// 函数名：swap
+// 函数功能：交换数据
+// 函数参数：数据类型指针
+// 函数返回类型及内容：空
+void swap(HeapDatatype* a, HeapDatatype* b);
+
+// 函数名：adjustup
+// 函数功能：堆向上调整算法
+// 函数参数：数据类型指针，向上调整的开始下标
+// 函数返回类型及内容：空
+void adjustup(HeapDatatype* a, int child);
+
+// 函数名：adjustdown
+// 函数功能：堆向下调整算法
+// 函数参数：数据类型指针，数据个数，向下调整的开始下标
+// 函数返回类型及内容：空
+void adjustdown(HeapDatatype* a, int n, int parent);

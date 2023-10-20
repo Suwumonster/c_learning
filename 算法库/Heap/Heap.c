@@ -24,15 +24,14 @@ void swap(HeapDatatype* a, HeapDatatype* b)
 	*b = tmp;
 }
 
-void adjustup(HP* php, int child)
+void adjustup(HeapDatatype* a, int child)
 {
-	assert(php);
 	while (child > 0)
 	{
 		int parent = (child - 1) / 2;
-		if (php->a[child] > php->a[parent])//默认是大堆，变成小堆只要改 > 为 <.
+		if (a[child] > a[parent])//默认是大堆，变成小堆改不等号
 		{
-			swap(&php->a[child], &php->a[parent]);
+			swap(&a[child], &a[parent]);
 			child = parent;
 		}
 		else
@@ -62,20 +61,20 @@ void heappush(HP* php, HeapDatatype x)
 	adjustup(php, php->size - 1);
 }
 
-void adjustdown(HP* php, int parent)
+void adjustdown(HeapDatatype* a, int n, int parent)
 {
 	int child = 2 * parent + 1;
-	while (child < php->size)
+	while (child < n)
 	{
 		
-		if (child + 1 < php->size && php->a[child] < php->a[child + 1])
+		if (child + 1 < n && a[child + 1] > a[child])
 		{
 			child = child + 1;
 		}
 
-		if (php->a[parent] < php->a[child])//默认大堆，小堆改不等号
+		if (a[child] > a[parent])//默认大堆，小堆改不等号
 		{
-			swap(&php->a[parent], &php->a[child]);
+			swap(&a[parent], &a[child]);
 			parent = child;
 			child = 2 * parent + 1;
 		}
@@ -92,7 +91,7 @@ void heappop(HP* php)
 	assert(!heapempty(php));
 	swap(&php->a[0], &php->a[php->size - 1]);
 	php->size--;
-	adjustdown(php, 0);
+	adjustdown(php->a, php->size, 0);
 }
 
 HeapDatatype heaptop(HP* php)
