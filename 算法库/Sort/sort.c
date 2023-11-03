@@ -167,6 +167,117 @@ void BubbleSort(int* a, int n)
 
 }
 
+int midNum(int* a, int start, int end)//快排优化，三数取中
+{
+	int mid = (start + end) / 2;
+	if (a[start] > a[mid])
+	{
+		if (a[mid] > a[end]) // a[start] > a[mid] > a[end]
+		{
+			return mid;
+		}
+		else if (a[start] > a[end]) // a[start] > a[end] > a[mid]
+		{
+			return end;
+		}
+		else//a[end] > a[start] > a[mid]
+		{
+			return start;
+		}
+	}
+	else// a[mid] > a[start]
+	{
+		if (a[start] > a[end])//a[mid] > a[start] > a[end]
+		{
+			return start;
+		}
+		else if (a[mid] > a[end])//a[mid] > a[end] > a[start]
+		{
+			return end;
+		}
+		else//a[end] > a[mid] > a[start]
+		{
+			return mid;
+		}
+	}
+}
+
+int PartSort1(int* a, int start, int end)//Hoare单趟快排思想
+{
+	int left = start;
+	int right = end;
+
+	//三数取中优化，避免有序情况，最坏情况
+	int keyi = midNum(a, start, end);
+	swap(&a[left], &a[keyi]);
+	keyi = left;
+
+	while (left < right)
+	{
+		while (left < right && a[right] >= a[keyi])
+		{
+			right--;
+		}
+		while (left < right && a[left] <= a[keyi])
+		{
+			left++;
+		}
+		swap(&a[left], &a[right]);
+	}
+	swap(&a[keyi], &a[right]);
+	keyi = right;
+	return keyi;
+}
+
+int PartSort2(int* a, int start, int end)//填坑法单趟快排思想
+{
+	int left = start;
+	int right = end;
+
+	//三数取中优化，避免有序情况，最坏情况
+	int midi = midNum(a, start, end);
+	swap(&a[left], &a[midi]);
+	int key = a[left];
+	int hole = left;
+
+	while (left < right)
+	{
+		while (left < right && a[right] >= key)
+		{
+			right--;
+		}
+		swap(&a[hole], &a[right]);
+		hole = right;
+
+		while (left < right && a[left] <= key)
+		{
+			left++;
+		}
+		swap(&a[hole], &a[left]);
+		hole = left;
+	}
+	a[hole] = key;
+	return hole;
+}
+
+int PartSort3(int* a, int start, int end)//前后指针单趟快排思想
+{
+	int cur = start + 1;
+	int prev = start;
+	int keyi = start;
+	while (cur <= end)
+	{
+		if (a[cur] < a[keyi] && ++prev != cur)
+		{
+			swap(&a[cur], &a[prev]);
+		}
+		cur++;
+	}
+	swap(&a[keyi], &a[prev]);
+	keyi = prev;
+	return keyi;
+}
+
 void _QuickSort(int* a, int start, int end)
 {
 	if (start >= end)
@@ -174,25 +285,19 @@ void _QuickSort(int* a, int start, int end)
 		return;
 	}
 
-	int left = start;
-	int right = end;
-	int base = left;
-	while (left < right)
+	if ((end - start + 1) < 15)//小区间优化，减少栈帧压力
 	{
-		while (left < right && a[right] >= a[base])
-		{
-			right--;
-		}
-		while (left < right && a[left] <= a[base])
-		{
-			left++;
-		}
-		swap(&a[left], &a[right]);
+		InsertSort(a + start, end - start + 1);
 	}
-	swap(&a[base], &a[right]);
+	else
+	{
+		
+		int keyi = PartSort3(a, start, end);
 
-	_QuickSort(a, start, right - 1);
-	_QuickSort(a, right + 1, end);
+		_QuickSort(a, start, keyi - 1);
+		_QuickSort(a, keyi + 1, end);
+	}
+
 }
 
 void QuickSort(int* a, int n)
