@@ -1,5 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #include "Sort.h"
+#include "stack.h"
+
 void swap(int* a, int* b)
 {
 	int tmp = *a;
@@ -303,4 +305,97 @@ void _QuickSort(int* a, int start, int end)
 void QuickSort(int* a, int n)
 {
 	_QuickSort(a, 0, n - 1);
+}
+
+void _QuickSortNonR(int* a, int start, int end)//也可以用队列实现
+{
+	ST st;
+	stackinit(&st);
+	stackpush(&st, start);
+	stackpush(&st, end);
+	while (!stackempty(&st))
+	{
+		int right = stacktop(&st);
+		stackpop(&st);
+		int left = stacktop(&st);
+		stackpop(&st);
+		int keyi = PartSort3(a, left, right);
+		if (left < keyi - 1)
+		{
+			stackpush(&st, left);
+			stackpush(&st, keyi - 1);
+		}
+		if (keyi + 1 < right)
+		{
+			stackpush(&st, keyi + 1);
+			stackpush(&st, right);
+		}
+	}
+	stackdestroy(&st);
+}
+
+//需要包含头文件 stack.h 栈实习非递归快排
+void QuickSortNonR(int* a, int n)
+{
+	_QuickSortNonR(a, 0, n - 1);
+}
+
+void _MergeSort(int* a, int start, int end, int *tmp)
+{
+	if (start >= end)
+	{
+		return;
+	}
+
+	//分解排序
+	int mid = (start + end) / 2;
+	_MergeSort(a, start, mid, tmp);
+	_MergeSort(a, mid + 1, end, tmp);
+
+	//归并
+	int start1 = start, end1 = mid;
+	int start2 = mid + 1, end2 = end;
+	int i = start;
+	while (start1 <= end1 && start2 <= end2)
+	{
+		if (a[start1] < a[start2])
+		{
+			tmp[i] = a[start1];
+			i++;
+			start1++;
+		}
+		else
+		{
+			tmp[i] = a[start2];
+			i++;
+			start2++;
+		}
+	}
+
+	while (start1 <= end1)
+	{
+		tmp[i] = a[start1];
+		i++;
+		start1++;
+	}
+	while (start2 <= end2)
+	{
+		tmp[i] = a[start2];
+		i++;
+		start2++;
+	}
+	memcpy(a + start, tmp + start, sizeof(int) * (end - start + 1));
+}
+
+void MergeSort(int* a, int n)
+{
+	int* tmp = (int*)malloc(sizeof(int) * n);
+	if (tmp == NULL)
+	{
+		perror("malloc fail");
+		exit(-1);
+	}
+	_MergeSort(a, 0, n - 1, tmp);
+	free(tmp);
+	tmp = NULL;
 }
