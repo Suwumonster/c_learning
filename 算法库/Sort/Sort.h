@@ -20,5 +20,6 @@ void QuickSortNonR(int* a, int n);
 
 void MergeSort(int* a, int n);
 
+void MergeSortNonR(int* a, int n);
 
 void print(int* a, int n);

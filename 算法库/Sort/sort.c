@@ -399,3 +399,72 @@ void MergeSort(int* a, int n)
 	free(tmp);
 	tmp = NULL;
 }
+
+void MergeSortNonR(int* a, int n)
+{
+	int* tmp = (int*)malloc(sizeof(int) * n);
+	if (tmp == NULL)
+	{
+		perror("malloc fail");
+		exit(-1);
+	}
+	int rangeN = 1;//归并时一组的数据个数
+	while (rangeN < n)
+	{
+		for (int j = 0; j < n; j += 2 * rangeN)
+		{
+			int start1 = j, end1 = j + rangeN - 1;
+			int start2 = j + rangeN, end2 = j + 2 * rangeN - 1;
+			if (end1 >= n)// end1 start2 end2 都越界
+			{
+				end1 = n - 1;
+				//第二组需要构造不存在的数组
+				start2 = n;
+				end2 = n - 1;
+			}
+			else if (start2 >= n)// start2 end2 都越界
+			{
+				//第二组需要构造不存在的数组
+				start2 = n;
+				end2 = n - 1;
+			}
+			else if (end2 >= n)//end2 越界
+			{
+				end2 = n - 1;
+			}
+			int i = j;//控制tmp数组下标
+			while (start1 <= end1 && start2 <= end2)
+			{
+				if (a[start1] < a[start2])
+				{
+					tmp[i] = a[start1];
+					i++;
+					start1++;
+				}
+				else
+				{
+					tmp[i] = a[start2];
+					i++;
+					start2++;
+				}
+			}
+
+			while (start1 <= end1)
+			{
+				tmp[i] = a[start1];
+				i++;
+				start1++;
+			}
+			while (start2 <= end2)
+			{
+				tmp[i] = a[start2];
+				i++;
+				start2++;
+			}
+			memcpy(a + j, tmp + j, sizeof(int) * (end2 - j + 1));
+		}
+		rangeN *= 2;
+	}
+	free(tmp);
+	tmp = NULL;
+}
