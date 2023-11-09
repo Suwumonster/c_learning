@@ -1,6 +1,4 @@
 #define _CRT_SECURE_NO_WARNINGS 1
-
-//超时，但可以通过
 /**
  * Note: The returned array must be malloced, assume caller calls free().
  */
@@ -137,45 +135,46 @@ void swap(int* a, int* b)
 	*b = tmp;
 }
 
-int midNum(int* a, int start, int end)//快排优化，三数取中
-{
-	int mid = (start + end) / 2;
-	if (a[start] > a[mid])
-	{
-		if (a[mid] > a[end]) // a[start] > a[mid] > a[end]
-		{
-			return mid;
-		}
-		else if (a[start] > a[end]) // a[start] > a[end] > a[mid]
-		{
-			return end;
-		}
-		else//a[end] > a[start] > a[mid]
-		{
-			return start;
-		}
-	}
-	else// a[mid] > a[start]
-	{
-		if (a[start] > a[end])//a[mid] > a[start] > a[end]
-		{
-			return start;
-		}
-		else if (a[mid] > a[end])//a[mid] > a[end] > a[start]
-		{
-			return end;
-		}
-		else//a[end] > a[mid] > a[start]
-		{
-			return mid;
-		}
-	}
-}
+//int midNum(int* a, int start, int end)//快排优化，三数取中
+//{
+//	int mid = (start + end) / 2;
+//	if (a[start] > a[mid])
+//	{
+//		if (a[mid] > a[end]) // a[start] > a[mid] > a[end]
+//		{
+//			return mid;
+//		}
+//		else if (a[start] > a[end]) // a[start] > a[end] > a[mid]
+//		{
+//			return end;
+//		}
+//		else//a[end] > a[start] > a[mid]
+//		{
+//			return start;
+//		}
+//	}
+//	else// a[mid] > a[start]
+//	{
+//		if (a[start] > a[end])//a[mid] > a[start] > a[end]
+//		{
+//			return start;
+//		}
+//		else if (a[mid] > a[end])//a[mid] > a[end] > a[start]
+//		{
+//			return end;
+//		}
+//		else//a[end] > a[mid] > a[start]
+//		{
+//			return mid;
+//		}
+//	}
+//}
 
 int Partsort(int* a, int start, int end)
 {
-	//三数取中优化，避免有序情况，最坏情况
-	int midi = midNum(a, start, end);
+	////三数取中优化，避免有序情况，最坏情况
+	//int midi = midNum(a, start, end);
+	int midi = start + rand() % (end - start + 1);//这样应该就可以AC
 	swap(&a[start], &a[midi]);
 
 	int keyi = start;
