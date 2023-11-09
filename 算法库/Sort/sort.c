@@ -280,6 +280,37 @@ int PartSort3(int* a, int start, int end)//前后指针单趟快排思想
 	return keyi;
 }
 
+void PartSort4(int* a, int start, int end, int *left, int *right)//三指针单趟快排思想 三路划分
+{
+	int cur = start + 1;
+	*left = start;
+	*right = end;
+	
+	int tmp = start + rand() % (end - start + 1);
+	swap(&a[tmp], &a[start]);
+	int key = a[start];
+
+	while (cur <= *right)
+	{
+		if (a[cur] < key)
+		{
+			swap(&a[cur], &a[*left]);
+			cur++;
+			(*left)++;
+		}
+		else if (a[cur] > key)
+		{
+			swap(&a[cur], &a[*right]);
+			(*right)--;
+		}
+		else// a[cur] == key
+		{
+			cur++;
+		}
+	}
+	
+	
+}
 void _QuickSort(int* a, int start, int end)
 {
 	if (start >= end)
@@ -287,23 +318,25 @@ void _QuickSort(int* a, int start, int end)
 		return;
 	}
 
-	if ((end - start + 1) < 15)//小区间优化，减少栈帧压力
+	//if ((end - start + 1) < 15)//小区间优化，减少栈帧压力
+	//{
+	//	InsertSort(a + start, end - start + 1);
+	//}
+	//else
 	{
-		InsertSort(a + start, end - start + 1);
-	}
-	else
-	{
-		
-		int keyi = PartSort3(a, start, end);
+		int left = start;
+		int right = end;
+		PartSort4(a, start, end, &left, &right);
 
-		_QuickSort(a, start, keyi - 1);
-		_QuickSort(a, keyi + 1, end);
+		_QuickSort(a, start, left - 1);
+		_QuickSort(a, right + 1, end);
 	}
 
 }
 
 void QuickSort(int* a, int n)
 {
+	srand((unsigned int)time(NULL));
 	_QuickSort(a, 0, n - 1);
 }
 
