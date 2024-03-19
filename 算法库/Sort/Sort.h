@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
+#include <stdlib.h>
 
 void swap(int* a, int* b);
 
@@ -22,5 +23,7 @@ void QuickSortNonR(int* a, int n);
 void MergeSort(int* a, int n);
 
 void MergeSortNonR(int* a, int n);
+
+void CountSort(int* a, int n);
 
 void print(int* a, int n);

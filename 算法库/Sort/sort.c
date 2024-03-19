@@ -340,38 +340,38 @@ void QuickSort(int* a, int n)
 	_QuickSort(a, 0, n - 1);
 }
 
-void _QuickSortNonR(int* a, int start, int end)//也可以用队列实现
-{
-	ST st;
-	stackinit(&st);
-	stackpush(&st, start);
-	stackpush(&st, end);
-	while (!stackempty(&st))
-	{
-		int right = stacktop(&st);
-		stackpop(&st);
-		int left = stacktop(&st);
-		stackpop(&st);
-		int keyi = PartSort3(a, left, right);
-		if (left < keyi - 1)
-		{
-			stackpush(&st, left);
-			stackpush(&st, keyi - 1);
-		}
-		if (keyi + 1 < right)
-		{
-			stackpush(&st, keyi + 1);
-			stackpush(&st, right);
-		}
-	}
-	stackdestroy(&st);
-}
-
-//需要包含头文件 stack.h 栈实习非递归快排
-void QuickSortNonR(int* a, int n)
-{
-	_QuickSortNonR(a, 0, n - 1);
-}
+//void _QuickSortNonR(int* a, int start, int end)//也可以用队列实现
+//{
+//	ST st;
+//	stackinit(&st);
+//	stackpush(&st, start);
+//	stackpush(&st, end);
+//	while (!stackempty(&st))
+//	{
+//		int right = stacktop(&st);
+//		stackpop(&st);
+//		int left = stacktop(&st);
+//		stackpop(&st);
+//		int keyi = PartSort3(a, left, right);
+//		if (left < keyi - 1)
+//		{
+//			stackpush(&st, left);
+//			stackpush(&st, keyi - 1);
+//		}
+//		if (keyi + 1 < right)
+//		{
+//			stackpush(&st, keyi + 1);
+//			stackpush(&st, right);
+//		}
+//	}
+//	stackdestroy(&st);
+//}
+//
+////需要包含头文件 stack.h 栈实习非递归快排
+//void QuickSortNonR(int* a, int n)
+//{
+//	_QuickSortNonR(a, 0, n - 1);
+//}
 
 void _MergeSort(int* a, int start, int end, int *tmp)
 {
@@ -500,4 +500,35 @@ void MergeSortNonR(int* a, int n)
 	}
 	free(tmp);
 	tmp = NULL;
+}
+
+void CountSort(int* a, int n)
+{
+	int max = a[0], min = a[0];
+	for (int i = 1; i < n; i++)
+	{
+		if (max < a[i])
+		{
+			max = a[i];
+		}
+		if (min > a[i])
+		{
+			min = a[i];
+		}
+	}
+	int range = max - min + 1;
+	int* countarr = (int*)calloc(range, sizeof(int));
+	for (int j = 0; j < n; j++)
+	{
+		countarr[a[j] - min]++;
+	}
+
+	int k = 0;
+	for (int i = 0; i < range; i++)
+	{
+		while (countarr[i]--)
+		{
+			a[k++] = i + min;
+		}
+	}
 }
